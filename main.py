@@ -1,6 +1,4 @@
 """SiriBot main entry point."""
-import asyncio
-import sys
 from cli.main import cli
 
 

@@ -2,9 +2,9 @@
 
 import os
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class OllamaConfig(BaseModel):
@@ -131,7 +131,7 @@ class ConfigManager:
                 )
 
         if self.config.model.provider in ("openai", "anthropic"):
-            key_attr = f"{self.config.model.provider.upper()()}_API_KEY"
+            key_attr = f"{self.config.model.provider.upper()}_API_KEY"
             if not os.getenv(key_attr) and not self.config.model.cloud_providers.get(
                 self.config.model.provider
             ):

@@ -2,7 +2,6 @@
 
 import logging
 import subprocess
-import json
 from typing import List, Dict, Any, Optional
 
 logger = logging.getLogger(__name__)

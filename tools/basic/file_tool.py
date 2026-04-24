@@ -1,8 +1,6 @@
 """File operations tool."""
-import os
 import shutil
 from pathlib import Path
-from typing import Optional
 import logging
 from ..registry import Tool, ToolCategory
 

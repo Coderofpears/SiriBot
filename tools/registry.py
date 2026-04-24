@@ -1,6 +1,6 @@
 """Tool registry for managing available tools."""
 import logging
-from typing import Callable, Optional, Any
+from typing import Callable, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 

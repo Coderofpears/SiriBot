@@ -5,7 +5,6 @@ import sys
 import click
 from pathlib import Path
 from core.logger import setup_logger, logger
-from core.config import ConfigManager
 
 # Import orchestrator components
 from orchestrator import SiriBot
@@ -215,7 +214,7 @@ def sync(ctx):
     bot = SiriBot(ctx.obj.get("config_path"))
     status = bot.get_sync_status()
 
-    click.echo(f"Sync Status:")
+    click.echo("Sync Status:")
     click.echo(f"  Enabled: {status.get('enabled', False)}")
     click.echo(f"  Pending changes: {status.get('pending_changes', 0)}")
     if status.get("device_id"):

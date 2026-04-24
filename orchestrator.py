@@ -1,7 +1,6 @@
 """SiriBot Orchestrator - coordinates all agents and components."""
 
 import asyncio
-import logging
 from typing import Optional
 from core.config import ConfigManager
 from core.model_manager import ModelManager
@@ -200,11 +199,16 @@ class SiriBot:
         health["services"]["model"] = self.model_manager.current_adapter is not None
 
         try:
-            stats = asyncio.get_event_loop().run_until_complete(self.get_memory_stats())
-            health["services"]["memory"] = True
-            health["services"]["memory_entries"] = stats.get("memory_entries", 0)
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                loop.create_task(self._health_check_memory(health))
+            else:
+                stats = loop.run_until_complete(self.get_memory_stats())
+                health["services"]["memory"] = True
+                health["services"]["memory_entries"] = stats.get("memory_entries", 0)
         except Exception:
             health["services"]["memory"] = False
+            health["services"]["memory_entries"] = 0
 
         health["services"]["sync"] = self.sync_service is not None
         health["services"]["workflow"] = self.workflow_engine is not None
@@ -213,7 +217,18 @@ class SiriBot:
         health["services"]["notes"] = self.notes is not None
         health["services"]["reminders"] = self.reminders is not None
 
-        if not all(health["services"].values()):
+        critical_services = ["model", "memory", "sync", "workflow", "plugins"]
+        if not all(health["services"].get(s, False) for s in critical_services):
             health["status"] = "degraded"
 
         return health
+
+    async def _health_check_memory(self, health: dict):
+        """Async helper for memory health check."""
+        try:
+            stats = await self.get_memory_stats()
+            health["services"]["memory"] = True
+            health["services"]["memory_entries"] = stats.get("memory_entries", 0)
+        except Exception:
+            health["services"]["memory"] = False
+            health["services"]["memory_entries"] = 0

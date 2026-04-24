@@ -1,7 +1,6 @@
 """Conversation agent - handles natural language interaction."""
 
 import logging
-from typing import Optional
 from dataclasses import dataclass, field
 from enum import Enum
 

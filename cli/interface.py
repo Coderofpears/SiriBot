@@ -1,14 +1,11 @@
 """Interactive SiriBot interface."""
 
 import asyncio
-import sys
 from typing import Optional
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
-from rich.live import Live
-from rich.style import Style
+from rich.prompt import Prompt
 from core.logger import logger
 from orchestrator import SiriBot
 

@@ -4,10 +4,10 @@ SiriBot Quick Setup - User-friendly setup for non-technical users.
 This provides a simple GUI installer experience.
 """
 
-import os
-import sys
 import subprocess
 from pathlib import Path
+import importlib.util
+import shutil
 
 
 def check_requirements():
@@ -17,9 +17,7 @@ def check_requirements():
     if not shutil.which("xcodebuild"):
         missing.append("Xcode (install from Mac App Store)")
 
-    try:
-        import ollama
-    except ImportError:
+    if not importlib.util.find_spec("ollama"):
         missing.append("Ollama (run: brew install ollama)")
 
     return missing
@@ -139,14 +137,12 @@ def main():
         subprocess.run(["brew", "install", "xcodegen"])
 
     # Create config
-    config_path = create_config()
+    create_config()
 
     # Check Ollama
-    try:
-        import ollama
-
+    if importlib.util.find_spec("ollama"):
         print("✓ Ollama is installed")
-    except ImportError:
+    else:
         install_ollama()
 
     print("""
@@ -167,6 +163,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import shutil
-
     main()

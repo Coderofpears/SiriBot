@@ -146,7 +146,6 @@ Create a revised plan that addresses this issue. Output JSON."""
     def _extract_json(self, text: str) -> Optional[dict]:
         """Extract JSON from text response using balanced brace counting."""
         start_markers = ["```json", "```", "{"]
-        end_marker = "}"
 
         json_start = -1
         for marker in start_markers:

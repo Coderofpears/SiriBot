@@ -1,7 +1,5 @@
 """Logging configuration for SiriBot."""
 import logging
-import sys
-from pathlib import Path
 from rich.logging import RichHandler
 from rich.console import Console
 

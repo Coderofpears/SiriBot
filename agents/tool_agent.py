@@ -2,8 +2,8 @@
 
 import logging
 from typing import Optional, Any
-from dataclasses import dataclass, field
-from .reasoning_agent import Plan, PlanStep
+from dataclasses import dataclass
+from .reasoning_agent import Plan
 
 logger = logging.getLogger(__name__)
 
