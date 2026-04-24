@@ -58,6 +58,26 @@ On first launch, the Setup wizard will guide you through:
 ├─────────────────────────────────────────────────────────────┤
 │                    SiriBot Orchestrator                      │
 ├────────────────┬────────────────┬──────────────────────────┤
+│  Conversation  │    Reasoning   │         Tool              │
+│    Agent       │     Agent      │        Agent              │
+├────────────────┴────────────────┴──────────────────────────┤
+│                    Tool Registry                             │
+├──────────────┬──────────────┬──────────────┬───────────────┤
+│ System Tools │ App Control  │ File Ops     │ Desktop Ctrl  │
+├──────────────┴──────────────┴──────────────┴───────────────┤
+│              Model Manager (Ollama + BYOK)                  │
+├─────────────────────────────────────────────────────────────┤
+│         Multi-Device Sync │ Workflow Engine                 │
+│         Plugin Marketplace │ Personal Model Manager         │
+└─────────────────────────────────────────────────────────────┘
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    SiriBot Studio / Menu Bar                  │
+├─────────────────────────────────────────────────────────────┤
+│                  Background Service (Hotword)                │
+├─────────────────────────────────────────────────────────────┤
+│                    SiriBot Orchestrator                      │
+├────────────────┬────────────────┬──────────────────────────┤
 │  Conversation  │    Reasoning   │         Tool             │
 │    Agent       │     Agent      │        Agent             │
 ├────────────────┴────────────────┴────────────────────────┤
@@ -89,6 +109,33 @@ Extend SiriBot with custom skills:
 - **File Organizer**: Sort and manage files
 - **Research**: Find and summarize information
 - **Writer**: Draft documents and emails
+
+### Multi-Device Sync
+Sync your settings, memory, and preferences across all your Macs:
+- Real-time synchronization
+- Conflict resolution
+- Offline support
+
+### Autonomous Workflows
+Create self-directing workflows that execute tasks automatically:
+- Scheduled workflows (e.g., daily reports)
+- Event-triggered workflows
+- Multi-step task automation
+- Retry logic and error handling
+
+### Plugin Marketplace
+Extend SiriBot with plugins:
+- **Code Helper**: Advanced code analysis
+- **Web Search**: Search the web for information
+- **Image Processor**: Process and manipulate images
+- Install from marketplace or build your own
+
+### Personal Fine-Tuned Models
+Train your own AI models:
+- LoRA adapters for efficient fine-tuning
+- Custom training datasets
+- Model evaluation and metrics
+- Export and share configurations
 
 ### Apple Shortcuts Integration
 Use SiriBot from Shortcuts app:

@@ -68,23 +68,23 @@ class MemoryAgent:
 
         logger.info(f"Memory database initialized at {self.db_path}")
 
-async def add_interaction(self, user_input: str, response: str, intent: str):
+    async def add_interaction(self, user_input: str, response: str, intent: str):
         """Add a conversation interaction to memory."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
             cursor = conn.cursor()
-            
+
             cursor.execute(
                 "INSERT INTO interactions (user_input, response, intent, timestamp) VALUES (?, ?, ?, ?)",
-                (user_input, response, intent, datetime.now().isoformat())
+                (user_input, response, intent, datetime.now().isoformat()),
             )
-            
+
             conn.commit()
             conn.close()
-            
+
             self.short_term_memory.append(Message(role="user", content=user_input))
             self.short_term_memory.append(Message(role="assistant", content=response))
-            
+
             if len(self.short_term_memory) > 100:
                 self.short_term_memory = self.short_term_memory[-100:]
         except Exception as e:
@@ -116,47 +116,54 @@ async def add_interaction(self, user_input: str, response: str, intent: str):
 
     async def recall(self, key: str) -> Optional[Any]:
         """Recall a value from long-term memory."""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        try:
+            conn = sqlite3.connect(self.db_path, timeout=10)
+            cursor = conn.cursor()
 
-        cursor.execute("SELECT value FROM memory WHERE key = ?", (key,))
-        row = cursor.fetchone()
+            cursor.execute("SELECT value FROM memory WHERE key = ?", (key,))
+            row = cursor.fetchone()
 
-        if row:
-            cursor.execute(
-                "UPDATE memory SET accessed_at = ? WHERE key = ?",
-                (datetime.now().isoformat(), key),
-            )
-            conn.commit()
+            if row:
+                cursor.execute(
+                    "UPDATE memory SET accessed_at = ? WHERE key = ?",
+                    (datetime.now().isoformat(), key),
+                )
+                conn.commit()
+                conn.close()
+                return json.loads(row[0])
+
             conn.close()
-            return json.loads(row[0])
-
-        conn.close()
+        except Exception as e:
+            logger.error(f"Memory recall failed: {e}")
         return None
 
     async def search(self, query: str, limit: int = 10) -> list[dict]:
         """Search memory for relevant entries."""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        try:
+            conn = sqlite3.connect(self.db_path, timeout=10)
+            cursor = conn.cursor()
 
-        cursor.execute(
-            "SELECT * FROM interactions WHERE user_input LIKE ? OR response LIKE ? ORDER BY timestamp DESC LIMIT ?",
-            (f"%{query}%", f"%{query}%", limit),
-        )
+            cursor.execute(
+                "SELECT * FROM interactions WHERE user_input LIKE ? OR response LIKE ? ORDER BY timestamp DESC LIMIT ?",
+                (f"%{query}%", f"%{query}%", limit),
+            )
 
-        rows = cursor.fetchall()
-        conn.close()
+            rows = cursor.fetchall()
+            conn.close()
 
-        return [
-            {
-                "id": r[0],
-                "user_input": r[1],
-                "response": r[2],
-                "intent": r[3],
-                "timestamp": r[4],
-            }
-            for r in rows
-        ]
+            return [
+                {
+                    "id": r[0],
+                    "user_input": r[1],
+                    "response": r[2],
+                    "intent": r[3],
+                    "timestamp": r[4],
+                }
+                for r in rows
+            ]
+        except Exception as e:
+            logger.error(f"Memory search failed: {e}")
+            return []
 
     def get_recent_context(self, limit: int = 20) -> list[Message]:
         """Get recent conversation context."""
@@ -164,19 +171,27 @@ async def add_interaction(self, user_input: str, response: str, intent: str):
 
     async def get_stats(self) -> dict:
         """Get memory statistics."""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        try:
+            conn = sqlite3.connect(self.db_path, timeout=10)
+            cursor = conn.cursor()
 
-        cursor.execute("SELECT COUNT(*) FROM memory")
-        memory_count = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM memory")
+            memory_count = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT(*) FROM interactions")
-        interaction_count = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM interactions")
+            interaction_count = cursor.fetchone()[0]
 
-        conn.close()
+            conn.close()
 
-        return {
-            "memory_entries": memory_count,
-            "interactions": interaction_count,
-            "short_term_size": len(self.short_term_memory),
-        }
+            return {
+                "memory_entries": memory_count,
+                "interactions": interaction_count,
+                "short_term_size": len(self.short_term_memory),
+            }
+        except Exception as e:
+            logger.error(f"Memory stats failed: {e}")
+            return {
+                "memory_entries": 0,
+                "interactions": 0,
+                "short_term_size": len(self.short_term_memory),
+            }

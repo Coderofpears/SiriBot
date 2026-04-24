@@ -5,7 +5,6 @@ import logging
 from typing import Optional, AsyncGenerator
 from abc import ABC, abstractmethod
 import aiohttp
-from openai import AsyncOpenAI, AsyncAnthropic
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +103,8 @@ class OpenAIAdapter(ModelAdapter):
     """Adapter for OpenAI cloud models."""
 
     def __init__(self, api_key: str, model: str = "gpt-4o"):
+        from openai import AsyncOpenAI
+
         self.client = AsyncOpenAI(api_key=api_key)
         self.model = model
 
@@ -136,7 +137,13 @@ class AnthropicAdapter(ModelAdapter):
     """Adapter for Anthropic cloud models."""
 
     def __init__(self, api_key: str, model: str = "claude-sonnet-4-20250514"):
-        self.client = AsyncAnthropic(api_key=api_key)
+        try:
+            from anthropic import AsyncAnthropic
+
+            self.client = AsyncAnthropic(api_key=api_key)
+        except ImportError:
+            self.client = None
+            logger.warning("Anthropic SDK not installed")
         self.model = model
 
     async def generate(
