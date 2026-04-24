@@ -1,0 +1,62 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup XcodeGen
+        run: brew install xcodegen
+      
+      - name: Build SiriBot
+        run: |
+          cd macos/SiriBot
+          xcodegen generate
+          xcodebuild -scheme SiriBot -configuration Release build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      
+      - name: Build SiriBot Studio
+        run: |
+          cd studio/SiriBotStudio
+          xcodegen generate
+          xcodebuild -scheme SiriBotStudio -configuration Release build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      
+      - name: Create DMG
+        run: |
+          mkdir -p build/release
+          ./setup/build_dmg.sh
+          ./setup/build_studio_dmg.sh
+      
+      - name: Upload Assets
+        uses: actions/upload-release-asset@v4
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: build/SiriBot-*.dmg
+          asset_name: SiriBot-${{ github.ref_name }}.dmg
+        id: upload-siribot
+      
+      - name: Upload Studio Assets
+        uses: actions/upload-release-asset@v4
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: build/SiriBotStudio-*.dmg
+          asset_name: SiriBotStudio-${{ github.ref_name }}.dmg
+
+  create-release:
+    needs: build-macos
+    runs-on: macos-latest
+    steps:
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

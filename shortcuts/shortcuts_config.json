@@ -1,0 +1,104 @@
+{
+  "name": "SiriBot",
+  "description": "Your AI assistant for Mac",
+  "shortcuts": [
+    {
+      "name": "Ask SiriBot",
+      "keyword": "siri",
+      "phrase": "Ask SiriBot",
+      "url": "siribot://chat?text=${text}",
+      "configurable": true
+    },
+    {
+      "name": "Quick Task",
+      "keyword": "task",
+      "phrase": "Run SiriBot Task",
+      "url": "siribot://handoff?task=${text}",
+      "configurable": true
+    },
+    {
+      "name": "Voice Command",
+      "keyword": "voice",
+      "phrase": "Voice Command SiriBot",
+      "url": "siribot://voice?command=${voice}",
+      "configurable": true
+    },
+    {
+      "name": "Get Today's Summary",
+      "keyword": "summary",
+      "phrase": "Get SiriBot Summary",
+      "url": "siribot://action?type=summary",
+      "configurable": false
+    },
+    {
+      "name": "Create Reminder",
+      "keyword": "remind",
+      "phrase": "Create SiriBot Reminder",
+      "url": "siribot://action?type=reminder&text=${text}",
+      "configurable": true
+    }
+  ],
+  "intents": [
+    {
+      "type": "ChatIntent",
+      "description": "Send a message to SiriBot and get a response",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "String",
+          "description": "Your message to SiriBot"
+        }
+      ],
+      "returns": "String"
+    },
+    {
+      "type": "TaskIntent", 
+      "description": "Have SiriBot complete a task",
+      "parameters": [
+        {
+          "name": "task",
+          "type": "String",
+          "description": "The task to complete"
+        }
+      ],
+      "returns": "Boolean"
+    },
+    {
+      "type": "NoteIntent",
+      "description": "Save a note to SiriBot",
+      "parameters": [
+        {
+          "name": "content",
+          "type": "String",
+          "description": "Note content"
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "description": "Note title (optional)"
+        }
+      ],
+      "returns": "Boolean"
+    }
+  ],
+  "url_schemes": {
+    "chat": "siribot://chat?text={message}",
+    "handoff": "siribot://handoff?task={task}",
+    "voice": "siribot://voice?command={command}",
+    "action": "siribot://action?type={type}&text={text}",
+    "reminder": "siribot://reminder?title={title}&time={time}",
+    "note": "siribot://note?title={title}&content={content}"
+  },
+  "setup_instructions": {
+    "title": "Setup SiriBot Shortcuts",
+    "steps": [
+      "1. Open the Shortcuts app on your Mac",
+      "2. Tap the '+' button to create a new shortcut",
+      "3. Add the 'URL' action",
+      "4. Enter: siribot://chat?text= followed by your message",
+      "5. Add 'Open URLs' action at the end",
+      "6. Tap the shortcut name to rename it",
+      "7. You can now run SiriBot from Shortcuts!"
+    ]
+  }
+}

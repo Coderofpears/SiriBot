@@ -1,204 +1,132 @@
-# 🤖 SiriBot
+# SiriBot
+### Your Personal AI Assistant for Mac
 
-**SiriBot** is an open-source, local-first, multimodal, agentic AI assistant that controls your Mac.
+![SiriBot](https://img.shields.io/badge/Version-1.0.0-blue)
+![macOS](https://img.shields.io/badge/macOS-14.0+-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+**SiriBot** is an easy-to-use AI assistant that lives in your menu bar and helps you accomplish tasks on your Mac — with just your voice or keyboard.
+
+---
 
 ## Features
 
-### Core Capabilities
-- **Local-First AI**: Runs entirely on your machine using Ollama/llama.cpp
-- **BYOK Support**: Plug in your own API keys for OpenAI/Anthropic cloud fallback
-- **Voice Control**: Hands-free operation with hotword detection
-- **Desktop Control**: Automate clicks, typing, and UI interactions
-- **Handoff Mode**: AI works independently on its own virtual desktop
-- **Apple Shortcuts**: Deep integration with macOS Shortcuts app
+### 🤖 Always There
+- Lives in your menu bar, ready when you need it
+- Start chatting instantly with `/voice` or just type
+- Works alongside any app
 
-### Applications
-- **SiriBot** (Menu Bar App): Always listening, minimal footprint
-- **SiriBot Studio**: Full-featured desktop application for power users
+### 🗣️ Voice Control
+- "Hey SiriBot, organize my Downloads folder"
+- Hands-free operation while you work
+- Configurable wake word
 
-## Quick Start
+### 📅 Apple Integration
+- **Calendar** — Create events, see your schedule
+- **Notes** — Save notes, search your notes
+- **Reminders** — Set and manage reminders
+- **Shortcuts** — Works with Apple Shortcuts app
 
-### Prerequisites
-- macOS 14.0+
-- Xcode 15+ (for building)
-- Ollama (for local AI, optional)
+### 🔄 Handoff Mode
+Let SiriBot work on its own virtual desktop while you continue working.
 
-### Installation
+### 🌐 Multi-Device Sync
+Sync your settings across all your Macs.
 
-1. **Install XcodeGen**:
+---
+
+## Download
+
+### DMG Installer (Recommended)
+Download the latest release from GitHub:
+- **[Download SiriBot for macOS](https://github.com/Coderofpears/SiriBot/releases/latest)**
+
+### From Source
 ```bash
-brew install xcodegen
+git clone https://github.com/Coderofpears/SiriBot.git
+cd SiriBot
+./setup/build_dmg.sh
 ```
 
-2. **Build the app**:
+---
+
+## Getting Started
+
+### 1. Download Ollama
+SiriBot uses Ollama for local AI. Download it free from [ollama.com](https://ollama.com) or run:
 ```bash
-cd macos/SiriBot
-xcodegen generate
-xcodebuild -scheme SiriBot -configuration Release build
+brew install ollama
 ```
 
-3. **Run SiriBot**:
+### 2. Download a Model
 ```bash
-open macos/build/Release/SiriBot.app
+ollama pull llama3.2
 ```
 
-### Configuration
-On first launch, the Setup wizard will guide you through:
-- AI Provider selection (Ollama/OpenAI/Anthropic)
-- Voice settings
-- Desktop control permissions
+### 3. Install SiriBot
+Open the DMG and drag SiriBot to Applications.
 
-## Architecture
+### 4. Launch SiriBot
+Open SiriBot from Applications. On first launch, the setup wizard will guide you through:
+- Choosing your AI model
+- Setting up voice (optional)
+- Granting permissions
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    SiriBot Studio / Menu Bar                  │
-├─────────────────────────────────────────────────────────────┤
-│                  Background Service (Hotword)                │
-├─────────────────────────────────────────────────────────────┤
-│                    SiriBot Orchestrator                      │
-├────────────────┬────────────────┬──────────────────────────┤
-│  Conversation  │    Reasoning   │         Tool              │
-│    Agent       │     Agent      │        Agent              │
-├────────────────┴────────────────┴──────────────────────────┤
-│                    Tool Registry                             │
-├──────────────┬──────────────┬──────────────┬───────────────┤
-│ System Tools │ App Control  │ File Ops     │ Desktop Ctrl  │
-├──────────────┴──────────────┴──────────────┴───────────────┤
-│              Model Manager (Ollama + BYOK)                  │
-├─────────────────────────────────────────────────────────────┤
-│         Multi-Device Sync │ Workflow Engine                 │
-│         Plugin Marketplace │ Personal Model Manager         │
-└─────────────────────────────────────────────────────────────┘
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    SiriBot Studio / Menu Bar                  │
-├─────────────────────────────────────────────────────────────┤
-│                  Background Service (Hotword)                │
-├─────────────────────────────────────────────────────────────┤
-│                    SiriBot Orchestrator                      │
-├────────────────┬────────────────┬──────────────────────────┤
-│  Conversation  │    Reasoning   │         Tool             │
-│    Agent       │     Agent      │        Agent             │
-├────────────────┴────────────────┴────────────────────────┤
-│                    Tool Registry                            │
-├──────────────┬──────────────┬──────────────┬───────────────┤
-│ System Tools │ App Control  │ File Ops     │ Desktop Ctrl  │
-├──────────────┴──────────────┴──────────────┴───────────────┤
-│              Model Manager (Ollama + BYOK)                  │
-└─────────────────────────────────────────────────────────────┘
-```
+---
 
-## Key Features
+## Using Apple Shortcuts
 
-### Voice Control
-Say "Hey Siri" to activate voice mode. Configure your hotword in Settings.
+SiriBot works with Apple Shortcuts! Add it to your workflows:
 
-### Handoff Mode
-Tell SiriBot to handle a complex task:
-> "Organize my Downloads folder and move all PDFs to a Documents subfolder"
+### Quick Actions
+- `siribot://chat?text=YOUR_MESSAGE` — Send a message
+- `siribot://handoff?task=YOUR_TASK` — Run a task
+- `siribot://voice?command=YOUR_COMMAND` — Voice command
 
-SiriBot will:
-1. Create its own virtual desktop
-2. Execute the task step by step
-3. Notify you when complete
+### Example Shortcuts
+1. Open Shortcuts app
+2. Tap "+" to create new shortcut
+3. Add "URL" action
+4. Enter: `siribot://chat?text=What's on my calendar today?`
+5. Add "Open URLs" action
+6. Run your shortcut!
 
-### Skills System
-Extend SiriBot with custom skills:
-- **Code Helper**: Write and debug code
-- **File Organizer**: Sort and manage files
-- **Research**: Find and summarize information
-- **Writer**: Draft documents and emails
-
-### Multi-Device Sync
-Sync your settings, memory, and preferences across all your Macs:
-- Real-time synchronization
-- Conflict resolution
-- Offline support
-
-### Autonomous Workflows
-Create self-directing workflows that execute tasks automatically:
-- Scheduled workflows (e.g., daily reports)
-- Event-triggered workflows
-- Multi-step task automation
-- Retry logic and error handling
-
-### Plugin Marketplace
-Extend SiriBot with plugins:
-- **Code Helper**: Advanced code analysis
-- **Web Search**: Search the web for information
-- **Image Processor**: Process and manipulate images
-- Install from marketplace or build your own
-
-### Personal Fine-Tuned Models
-Train your own AI models:
-- LoRA adapters for efficient fine-tuning
-- Custom training datasets
-- Model evaluation and metrics
-- Export and share configurations
-
-### Apple Shortcuts Integration
-Use SiriBot from Shortcuts app:
-```
-siribot://chat?text=YOUR_MESSAGE
-siribot://handoff?task=YOUR_TASK
-siribot://voice?command=YOUR_COMMAND
-```
-
-### macOS Integrations
-Seamless integration with your Mac apps:
-- **Calendar** - Create events, view schedules, manage your day
-- **Notes** - Read and write to your Notes app
-- **Reminders** - Create, complete, and manage reminders
+---
 
 ## Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
+| ⌘+L | Toggle listening |
 | ⌘+, | Settings |
-| ⌘+L | Toggle Listening |
-| ⌘+H | Handoff Mode |
-| ⌘+K | Clear Chat |
-
-## Project Structure
-
-```
-SiriBot/
-├── macos/
-│   └── SiriBot/           # Main menu bar app
-│       ├── Sources/       # Swift source files
-│       ├── Resources/     # Assets, configs
-│       └── Supporting/    # Info.plist, entitlements
-├── studio/
-│   └── SiriBotStudio/     # Full desktop application
-├── shared/
-│   ├── Models/           # Data models
-│   └── Services/         # Core services (AI, Voice, etc.)
-├── shortcuts/            # Apple Shortcuts documentation
-├── setup/                # Build and deployment scripts
-└── README.md
-```
-
-## Development
-
-### Building
-```bash
-./setup/build.sh
-```
-
-### Deploying to GitHub
-```bash
-GITHUB_TOKEN=xxx ./setup/deploy.sh SiriBot
-```
-
-## License
-
-MIT License - See LICENSE file for details.
-
-## Contributing
-
-Contributions welcome! Please read the contribution guidelines and submit PRs.
+| ⌘+K | Clear chat |
 
 ---
 
-**SiriBot** — Your AI, on your Mac, in your control.
+## System Requirements
+
+- macOS 14.0 (Sonoma) or later
+- Apple Silicon or Intel Mac
+- 4GB RAM minimum
+- Ollama (free, runs locally)
+
+---
+
+## Privacy
+
+**Your data stays on your Mac.**
+- All AI processing happens locally by default
+- No subscription required
+- No cloud accounts needed
+- Your conversations are private
+
+---
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/Coderofpears/SiriBot/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Coderofpears/SiriBot/discussions)
+
+---
+
+**Made with ❤️ for Mac users who want AI that respects their privacy.**

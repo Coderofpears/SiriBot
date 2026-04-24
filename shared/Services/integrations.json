@@ -1,0 +1,113 @@
+{
+  "name": "SiriBot",
+  "version": "1.0.0",
+  "integration_version": "1.0",
+  "products": [
+    {
+      "id": "calendar",
+      "name": "Apple Calendar",
+      "platform": "macos",
+      "capabilities": [
+        "create_event",
+        "list_events",
+        "delete_event",
+        "get_upcoming"
+      ],
+      "automations": [
+        {
+          "trigger": "daily_morning",
+          "action": "list_todays_events",
+          "notification": true
+        },
+        {
+          "trigger": "event_reminder",
+          "action": "send_notification",
+            "minutes_before": 15
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "name": "Apple Notes",
+      "platform": "macos",
+      "capabilities": [
+        "create_note",
+        "read_note",
+        "update_note",
+        "delete_note",
+        "search_notes"
+      ],
+      "automations": [
+        {
+          "trigger": "on_task_complete",
+          "action": "save_to_notes",
+          "folder": "SiriBot Tasks"
+        }
+      ]
+    },
+    {
+      "id": "reminders",
+      "name": "Apple Reminders",
+      "platform": "macos",
+      "capabilities": [
+        "create_reminder",
+        "complete_reminder",
+        "list_reminders",
+        "snooze_reminder",
+        "delete_reminder"
+      ],
+      "automations": [
+        {
+          "trigger": "scheduled",
+          "action": "check_overdue",
+          "notification": true
+        }
+      ]
+    },
+    {
+      "id": "shortcuts",
+      "name": "Apple Shortcuts",
+      "platform": "macos",
+      "capabilities": [
+        "receive_url",
+        "send_notification",
+        "run_shortcut"
+      ]
+    },
+    {
+      "id": "finder",
+      "name": "Finder",
+      "platform": "macos",
+      "capabilities": [
+        "file_operations",
+        "folder_navigation",
+        "file_search"
+      ]
+    },
+    {
+      "id": "spotlight",
+      "name": "Spotlight",
+      "platform": "macos",
+      "capabilities": [
+        "search_files",
+        "open_apps",
+        "system_commands"
+      ]
+    },
+    {
+      "id": "safari",
+      "name": "Safari",
+      "platform": "macos",
+      "capabilities": [
+        "open_tab",
+        "bookmarks",
+        "reading_list"
+      ]
+    }
+  ],
+  "handoff": {
+    "enabled": true,
+    "desktop_count": 3,
+    "switch_shortcut": "⌃⌥⌘S"
+  }
+}

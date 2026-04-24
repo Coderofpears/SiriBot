@@ -17,10 +17,85 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             showMainWindow()
             backgroundService.start()
         }
+        
+        // Handle any URLs passed at launch
+        if let url = notification.userInfo?["UIApplicationLaunchOptionsURLKey"] as? URL {
+            handleURL(url)
+        }
     }
     
     func applicationWillTerminate(_ notification: Notification) {
         backgroundService.stop()
+    }
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls {
+            handleURL(url)
+        }
+    }
+    
+    private func handleURL(_ url: URL) {
+        guard url.scheme == "siribot" else { return }
+        
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        let queryItems = components?.queryItems ?? []
+        let params = Dictionary(uniqueKeysWithValues: queryItems.compactMap { item in
+            guard let value = item.value else { return nil }
+            return (item.name, value)
+        })
+        
+        switch url.host {
+        case "chat":
+            if let text = params["text"] {
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("SiriBotChatMessage"),
+                    object: nil,
+                    userInfo: ["message": text]
+                )
+                showMainWindow()
+            }
+        case "handoff":
+            if let task = params["task"] {
+                HandoffService.shared.startHandoff(task: task) { [weak self] in
+                    self?.showHandoffWindow()
+                }
+            }
+        case "voice":
+            if let command = params["command"] {
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("SiriBotVoiceCommand"),
+                    object: nil,
+                    userInfo: ["command": command]
+                )
+            }
+        case "action":
+            handleAction(params)
+        case "reminder":
+            if let title = params["title"] {
+                RemindersService.shared.create(title: title, time: params["time"])
+            }
+        case "note":
+            if let content = params["content"] {
+                NotesService.shared.create(title: params["title"] ?? "", content: content)
+            }
+        default:
+            break
+        }
+    }
+    
+    private func handleAction(_ params: [String: String]) {
+        guard let type = params["type"] else { return }
+        
+        switch type {
+        case "summary":
+            NotificationCenter.default.post(name: NSNotification.Name("SiriBotGetSummary"), object: nil)
+        case "reminder":
+            if let text = params["text"] {
+                RemindersService.shared.create(title: text, time: nil)
+            }
+        default:
+            break
+        }
     }
     
     private func shouldRunSetup() -> Bool {
