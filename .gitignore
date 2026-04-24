@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Data
+data/*.db
+data/*.db-journal
+*.sqlite
+*.sqlite3
+
+# Config
+config/config.yaml
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+*.icloud
+**/.DS_Store
+
+# Build
+macos/build/
+studio/build/
+*.xcuserstate
+*.xcworkspace
+!macos/SiriBot/project.yml
+!studio/SiriBotStudio/project.yml
+
+# Temporary
+tmp/
+temp/
+*.tmp

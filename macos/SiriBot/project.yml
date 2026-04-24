@@ -1,0 +1,48 @@
+name: SiriBot
+options:
+  bundleIdPrefix: com.siribot
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+settings:
+  base:
+    PRODUCT_NAME: SiriBot
+    PRODUCT_BUNDLE_IDENTIFIER: com.siribot.SiriBot
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    INFOPLIST_KEY_LSUIElement: YES
+    INFOPLIST_KEY_NSAppleEventsUsageDescription: "SiriBot needs to control applications"
+    INFOPLIST_KEY_NSMicrophoneUsageDescription: "SiriBot needs microphone for voice input"
+
+targets:
+  SiriBot:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+        excludes:
+          - "**/.DS_Store"
+      - path: ../shared
+        excludes:
+          - "**/.DS_Store"
+    resources:
+      - path: Resources
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.siribot.SiriBot
+        INFOPLIST_FILE: Supporting/Info.plist
+        CODE_SIGN_ENTITLEMENTS: Supporting/SiriBot.entitlements
+        LD_RUNPATH_SEARCH_PATHS: "@executable_path/../Frameworks"
+        COMBINE_HIDPI_IMAGES: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO

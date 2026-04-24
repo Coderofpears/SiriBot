@@ -1,0 +1,57 @@
+# SiriBot Configuration
+
+app:
+  name: "SiriBot"
+  version: "1.0.0"
+  log_level: "INFO"
+
+model:
+  # Primary: Local Ollama
+  provider: "ollama"
+  ollama:
+    base_url: "http://localhost:11434"
+    model: "llama3.2"
+    temperature: 0.7
+    max_tokens: 2048
+  
+  # Fallback: Cloud BYOK
+  cloud_providers:
+    openai:
+      enabled: false
+      api_key: ""
+      model: "gpt-4o"
+    anthropic:
+      enabled: false
+      api_key: ""
+      model: "claude-sonnet-4-20250514"
+
+voice:
+  input:
+    engine: "whisper"
+    model: "base"
+    energy_threshold: 300
+    pause_threshold: 2.0
+  
+  output:
+    engine: "pyttsx3"
+    rate: 200
+    volume: 1.0
+
+agent:
+  max_iterations: 10
+  confirmation_required:
+    - "delete"
+    - "rm"
+    - "format"
+    - "sudo"
+  timeout_seconds: 300
+
+memory:
+  type: "sqlite"
+  db_path: "./data/memory.db"
+  max_entries: 10000
+
+safety:
+  allow_shell_commands: true
+  allow_file_operations: true
+  max_file_size_mb: 100
