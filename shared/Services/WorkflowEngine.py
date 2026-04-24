@@ -101,34 +101,45 @@ class WorkflowEngine:
         logger.info(f"Starting autonomous workflow: {workflow.name}")
 
         try:
-            for i, step in enumerate(workflow.steps):
-                result = await self._execute_step(step, context, results)
-                results.append(result)
-
-                if not result["success"]:
-                    if step.retry_count < step.max_retries:
-                        step.retry_count += 1
-                        logger.warning(
-                            f"Retrying step {step.name} (attempt {step.retry_count})"
+            for step in workflow.steps:
+                if step.condition:
+                    condition_met = await self._evaluate_condition(
+                        step.condition, context, results
+                    )
+                    if not condition_met:
+                        logger.info(f"Skipping step {step.name} - condition not met")
+                        results.append(
+                            {"success": True, "step": step.name, "skipped": True}
                         )
                         continue
+
+                attempt = 0
+                while attempt <= step.max_retries:
+                    result = await self._execute_step(step, context, results)
+                    results.append(result)
+
+                    if result["success"]:
+                        break
+
+                    attempt += 1
+                    if attempt <= step.max_retries:
+                        step.retry_count = attempt
+                        logger.warning(f"Retrying step {step.name} (attempt {attempt})")
                     else:
                         workflow.state = WorkflowState.FAILED
                         break
 
-                if step.condition and not await self._evaluate_condition(
-                    step.condition, context, results
-                ):
-                    logger.info(f"Skipping step {step.name} - condition not met")
-                    continue
+                if workflow.state == WorkflowState.FAILED:
+                    break
 
-            workflow.state = WorkflowState.COMPLETED
-            workflow.success_count += 1
+            if workflow.state != WorkflowState.FAILED:
+                workflow.state = WorkflowState.COMPLETED
+                workflow.success_count += 1
 
             return {
-                "success": True,
+                "success": workflow.state == WorkflowState.COMPLETED,
                 "workflow_id": workflow_id,
-                "steps_completed": len([r for r in results if r["success"]]),
+                "steps_completed": len([r for r in results if r.get("success")]),
                 "results": results,
             }
 
@@ -195,15 +206,22 @@ class WorkflowEngine:
     async def _evaluate_condition(
         self, condition: str, context: Dict, results: List
     ) -> bool:
-        """Evaluate a condition expression."""
+        """Evaluate a condition using registered checkers only (no eval)."""
         try:
             for key, checker in self._condition_checkers.items():
                 if key in condition:
-                    condition = condition.replace(key, str(checker(context, results)))
-            return eval(condition, {"__builtins__": {}}, {})
+                    result = checker(context, results)
+                    condition = condition.replace(key, str(result).lower())
+
+            condition = condition.strip()
+            if condition in ("true", "false"):
+                return condition == "true"
+
+            logger.warning(f"Cannot evaluate condition: {condition}")
+            return True
         except Exception as e:
             logger.error(f"Condition evaluation failed: {e}")
-            return False
+            return True
 
     def register_condition_checker(self, name: str, checker: Callable):
         """Register a custom condition checker."""

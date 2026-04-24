@@ -32,12 +32,12 @@ class SyncEntry:
 class MultiDeviceSync:
     """Synchronize data across multiple devices."""
 
-def __init__(self, config, device_id: Optional[str] = None):
+    def __init__(self, config, device_id: Optional[str] = None):
         self.config = config
         self.device_id = device_id or self._generate_device_id()
         self.sync_interval = 30
-        self.enabled = getattr(config, 'sync_enabled', False)
-        sync_config = getattr(config, 'sync', {}) or {}
+        self.enabled = getattr(config, "sync_enabled", False)
+        sync_config = getattr(config, "sync", {}) or {}
         if isinstance(sync_config, dict):
             self.cloud_endpoint = sync_config.get("endpoint", "http://localhost:8080")
             self.sync_interval = sync_config.get("interval", 30)

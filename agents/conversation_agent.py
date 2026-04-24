@@ -58,9 +58,15 @@ Always confirm before executing risky operations like deletions or system change
         self.memory_agent = memory_agent
         self.tool_agent = tool_agent
         self.reasoning_agent = reasoning_agent
-        self.conversation_history: list[Message] = [
-            Message(role="system", content=self.SYSTEM_PROMPT)
-        ]
+        self.conversation_history: list[Message] = []
+
+    def _build_api_messages(self) -> list[dict]:
+        """Build messages for API, injecting system prompt exactly once."""
+        messages = [{"role": "system", "content": self.SYSTEM_PROMPT}]
+        for msg in self.conversation_history:
+            if msg.role != "system":
+                messages.append({"role": msg.role, "content": msg.content})
+        return messages
 
     async def chat(self, user_input: str) -> str:
         """Process a user message and return response."""
@@ -130,10 +136,7 @@ Respond with just the intent name."""
         """Handle direct commands."""
         self.conversation_history.append(Message(role="user", content=user_input))
 
-        messages = [{"role": "system", "content": self.SYSTEM_PROMPT}]
-        messages.extend(
-            [{"role": m.role, "content": m.content} for m in self.conversation_history]
-        )
+        messages = self._build_api_messages()
 
         response = ""
         async for chunk in self.model_manager.generate(messages):
@@ -147,10 +150,7 @@ Respond with just the intent name."""
         """Handle general conversation."""
         self.conversation_history.append(Message(role="user", content=user_input))
 
-        messages = [{"role": "system", "content": self.SYSTEM_PROMPT}]
-        messages.extend(
-            [{"role": m.role, "content": m.content} for m in self.conversation_history]
-        )
+        messages = self._build_api_messages()
 
         response = ""
         async for chunk in self.model_manager.generate(messages):
@@ -166,4 +166,4 @@ Respond with just the intent name."""
 
     def clear_history(self):
         """Clear conversation history."""
-        self.conversation_history = [Message(role="system", content=self.SYSTEM_PROMPT)]
+        self.conversation_history = []

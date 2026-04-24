@@ -150,15 +150,16 @@ class AnthropicAdapter(ModelAdapter):
         self, messages: list[dict], **kwargs
     ) -> AsyncGenerator[str, None]:
         """Generate streamed response from Anthropic."""
-        stream = await self.client.messages.create(
+        if not self.client:
+            return
+
+        async with self.client.messages.stream(
             model=kwargs.get("model", self.model),
             messages=messages,
             max_tokens=kwargs.get("max_tokens", 2048),
-            stream=True,
-        )
-        async for chunk in stream:
-            if hasattr(chunk, "delta") and chunk.delta.type == "content_delta":
-                yield chunk.delta.text
+        ) as stream:
+            async for text_stream in stream.text_stream:
+                yield text_stream
 
     async def complete(self, prompt: str, **kwargs) -> str:
         """Generate complete response from Anthropic."""
@@ -178,6 +179,15 @@ class ModelManager:
         self.current_adapter: Optional[ModelAdapter] = None
         self._initialize_adapter()
 
+    def _get_cloud_provider_value(
+        self, provider: str, field: str, default: str = ""
+    ) -> str:
+        """Safely get value from cloud provider config."""
+        provider_config = self.config.model.cloud_providers.get(provider)
+        if provider_config and hasattr(provider_config, field):
+            return getattr(provider_config, field) or default
+        return os.getenv(f"{provider.upper()}_API_KEY", default)
+
     def _initialize_adapter(self):
         """Initialize the current model adapter."""
         model_config = self.config.model
@@ -194,15 +204,16 @@ class ModelManager:
             )
         elif model_config.provider == "openai":
             self.current_adapter = OpenAIAdapter(
-                api_key=model_config.cloud_providers.get("openai", {}).api_key
-                or os.getenv("OPENAI_API_KEY", ""),
-                model=model_config.cloud_providers.get("openai", {}).model or "gpt-4o",
+                api_key=self._get_cloud_provider_value("openai", "api_key", ""),
+                model=self._get_cloud_provider_value("openai", "model", "gpt-4o")
+                or "gpt-4o",
             )
         elif model_config.provider == "anthropic":
             self.current_adapter = AnthropicAdapter(
-                api_key=model_config.cloud_providers.get("anthropic", {}).api_key
-                or os.getenv("ANTHROPIC_API_KEY", ""),
-                model=model_config.cloud_providers.get("anthropic", {}).model
+                api_key=self._get_cloud_provider_value("anthropic", "api_key", ""),
+                model=self._get_cloud_provider_value(
+                    "anthropic", "model", "claude-sonnet-4-20250514"
+                )
                 or "claude-sonnet-4-20250514",
             )
 

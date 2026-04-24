@@ -29,15 +29,14 @@ class ToolAgent:
     async def execute_plan(self, plan: Plan) -> str:
         """Execute a complete plan."""
         results = []
-        max_iterations = plan.current_step + len(plan.steps)
+        total_steps = len(plan.steps)
+        max_iterations = max(total_steps * 2 + 1, 1)
         iterations = 0
 
-        while (
-            not plan.completed and not plan.failed and iterations < max_iterations + 10
-        ):
+        while not plan.completed and not plan.failed and iterations < max_iterations:
             iterations += 1
 
-            if plan.current_step >= len(plan.steps):
+            if plan.current_step >= total_steps:
                 plan.completed = True
                 break
 
@@ -56,7 +55,6 @@ class ToolAgent:
                     results.append(result.output)
                     plan.current_step += 1
                 else:
-                    # Handle failure
                     plan.error = result.error
                     plan.failed = True
                     results.append(f"Error: {result.error}")

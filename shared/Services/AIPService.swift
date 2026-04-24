@@ -137,7 +137,7 @@ class AIPService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(key)", forHTTPHeaderField: "x-api-key")
+        request.setValue(key, forHTTPHeaderField: "x-api-key")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
         
@@ -250,11 +250,7 @@ class AIPService {
     }
     
     private func parsePlan(from response: String, goal: String) -> Plan {
-        // Try to find JSON in response
-        var jsonString = response
-        if let range = response.range(of: "{"), let endRange = response.range(of: "}", range: range.upperBound..<response.endIndex, options: .backwards) {
-            jsonString = String(response[range.lowerBound...endRange.upperBound])
-        }
+        var jsonString = extractBalancedJSON(from: response)
         
         if let data = jsonString.data(using: .utf8),
            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -270,6 +266,35 @@ class AIPService {
         }
         
         return Plan(goal: goal, steps: [])
+    }
+    
+    private func extractBalancedJSON(from text: String) -> String {
+        var startIndex: String.Index?
+        var braceCount = 0
+        var endIndex: String.Index?
+        
+        for (i, char) in text.enumerated() {
+            let index = text.index(text.startIndex, offsetBy: i)
+            
+            if char == "{" {
+                if startIndex == nil {
+                    startIndex = index
+                }
+                braceCount += 1
+            } else if char == "}" {
+                braceCount -= 1
+                if braceCount == 0 && startIndex != nil {
+                    endIndex = text.index(after: index)
+                    break
+                }
+            }
+        }
+        
+        if let start = startIndex, let end = endIndex {
+            return String(text[start..<end])
+        }
+        
+        return "{}"
     }
     
     private func systemPrompt() -> String {
