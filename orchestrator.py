@@ -78,16 +78,37 @@ class SiriBot:
             logger.warning(f"Model manager not available: {e}")
             self.model_manager_service = None
 
+        try:
+            from shared.Services.CalendarIntegration import get_calendar_integration
+
+            self.calendar = get_calendar_integration()
+        except Exception as e:
+            logger.warning(f"Calendar integration not available: {e}")
+            self.calendar = None
+
+        try:
+            from shared.Services.NotesIntegration import get_notes_integration
+
+            self.notes = get_notes_integration()
+        except Exception as e:
+            logger.warning(f"Notes integration not available: {e}")
+            self.notes = None
+
+        try:
+            from shared.Services.RemindersIntegration import get_reminders_integration
+
+            self.reminders = get_reminders_integration()
+        except Exception as e:
+            logger.warning(f"Reminders integration not available: {e}")
+            self.reminders = None
+
     def _register_tools(self):
         """Register all available tools."""
-        # Shell tool
         self.tool_registry.register(get_shell_tool())
 
-        # File tools
         for tool in get_file_tools():
             self.tool_registry.register(tool)
 
-        # App tools
         for tool in get_app_tools():
             self.tool_registry.register(tool)
 
@@ -156,3 +177,11 @@ class SiriBot:
         if self.model_manager_service:
             return self.model_manager_service.list_models()
         return []
+
+    def get_integrations(self) -> dict:
+        """Get available integrations status."""
+        return {
+            "calendar": self.calendar is not None,
+            "notes": self.notes is not None,
+            "reminders": self.reminders is not None,
+        }

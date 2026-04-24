@@ -32,14 +32,17 @@ class SyncEntry:
 class MultiDeviceSync:
     """Synchronize data across multiple devices."""
 
-    def __init__(self, config, device_id: Optional[str] = None):
+def __init__(self, config, device_id: Optional[str] = None):
         self.config = config
         self.device_id = device_id or self._generate_device_id()
         self.sync_interval = 30
-        self.cloud_endpoint = config.get("sync", {}).get(
-            "endpoint", "http://localhost:8080"
-        )
-        self.enabled = config.get("sync", {}).get("enabled", False)
+        self.enabled = getattr(config, 'sync_enabled', False)
+        sync_config = getattr(config, 'sync', {}) or {}
+        if isinstance(sync_config, dict):
+            self.cloud_endpoint = sync_config.get("endpoint", "http://localhost:8080")
+            self.sync_interval = sync_config.get("interval", 30)
+        else:
+            self.cloud_endpoint = "http://localhost:8080"
         self._sync_queue: List[SyncEntry] = []
         self._local_cache: Dict[str, Any] = {}
         self._sync_task: Optional[asyncio.Task] = None

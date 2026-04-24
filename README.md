@@ -145,6 +145,12 @@ siribot://handoff?task=YOUR_TASK
 siribot://voice?command=YOUR_COMMAND
 ```
 
+### macOS Integrations
+Seamless integration with your Mac apps:
+- **Calendar** - Create events, view schedules, manage your day
+- **Notes** - Read and write to your Notes app
+- **Reminders** - Create, complete, and manage reminders
+
 ## Keyboard Shortcuts
 
 | Shortcut | Action |
