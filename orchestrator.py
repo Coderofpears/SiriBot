@@ -1,5 +1,6 @@
 """SiriBot Orchestrator - coordinates all agents and components."""
 
+import asyncio
 import logging
 from typing import Optional
 from core.config import ConfigManager
@@ -15,6 +16,8 @@ from tools.basic.file_tool import get_file_tools
 from tools.basic.app_tool import get_app_tools
 
 logger = logger
+
+VERSION = "1.0.0"
 
 
 class SiriBot:
@@ -185,3 +188,32 @@ class SiriBot:
             "notes": self.notes is not None,
             "reminders": self.reminders is not None,
         }
+
+    def get_version(self) -> str:
+        """Get SiriBot version."""
+        return VERSION
+
+    def health_check(self) -> dict:
+        """Perform health check on all services."""
+        health = {"status": "healthy", "version": VERSION, "services": {}}
+
+        health["services"]["model"] = self.model_manager.current_adapter is not None
+
+        try:
+            stats = asyncio.get_event_loop().run_until_complete(self.get_memory_stats())
+            health["services"]["memory"] = True
+            health["services"]["memory_entries"] = stats.get("memory_entries", 0)
+        except Exception:
+            health["services"]["memory"] = False
+
+        health["services"]["sync"] = self.sync_service is not None
+        health["services"]["workflow"] = self.workflow_engine is not None
+        health["services"]["plugins"] = self.plugin_marketplace is not None
+        health["services"]["calendar"] = self.calendar is not None
+        health["services"]["notes"] = self.notes is not None
+        health["services"]["reminders"] = self.reminders is not None
+
+        if not all(health["services"].values()):
+            health["status"] = "degraded"
+
+        return health

@@ -75,6 +75,10 @@ class Config(BaseModel):
     agent: AgentConfig = AgentConfig()
     memory: MemoryConfig = MemoryConfig()
     safety: SafetyConfig = SafetyConfig()
+    sync: dict = {}
+    workflow: dict = {}
+    plugins: dict = {}
+    integrations: dict = {}
 
 
 class ConfigManager:
@@ -115,6 +119,25 @@ class ConfigManager:
     def get(self) -> Config:
         """Get current configuration."""
         return self.config
+
+    def validate(self) -> list[str]:
+        """Validate configuration and return list of warnings."""
+        warnings = []
+
+        if self.config.model.provider == "ollama":
+            if "localhost" not in self.config.model.ollama.base_url:
+                warnings.append(
+                    "Ollama URL doesn't look like localhost - ensure server is running"
+                )
+
+        if self.config.model.provider in ("openai", "anthropic"):
+            key_attr = f"{self.config.model.provider.upper()()}_API_KEY"
+            if not os.getenv(key_attr) and not self.config.model.cloud_providers.get(
+                self.config.model.provider
+            ):
+                warnings.append(f"No API key found for {self.config.model.provider}")
+
+        return warnings
 
 
 config_manager = ConfigManager()

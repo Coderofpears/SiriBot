@@ -222,6 +222,25 @@ def sync(ctx):
         click.echo(f"  Device ID: {status.get('device_id')}")
 
 
+@cli.command()
+@click.pass_context
+def health(ctx):
+    """Check SiriBot health status."""
+    from orchestrator import SiriBot
+
+    bot = SiriBot(ctx.obj.get("config_path"))
+    health = bot.health_check()
+
+    status_color = "green" if health["status"] == "healthy" else "yellow"
+    click.echo(f"Status: {click.style(health['status'].upper(), fg=status_color)}")
+    click.echo(f"Version: {health['version']}")
+    click.echo("\nServices:")
+
+    for service, available in health["services"].items():
+        icon = click.style("✓", fg="green") if available else click.style("✗", fg="red")
+        click.echo(f"  {icon} {service}")
+
+
 def main():
     """Main entry point."""
     cli(obj={})
