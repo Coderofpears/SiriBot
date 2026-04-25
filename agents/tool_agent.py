@@ -94,8 +94,14 @@ class ToolAgent:
 
         # Request confirmation for risky operations
         if self.safety_manager.needs_confirmation(tool_name, kwargs):
-            # For now, auto-confirm. In real impl, would prompt user
-            logger.warning(f"Risky operation {tool_name} auto-confirmed")
+            # Block risky operations by default - they require explicit configuration
+            logger.error(f"Risky operation blocked: {tool_name}")
+            return ToolResult(
+                success=False,
+                output=None,
+                error=f"Operation requires confirmation: {tool_name} - enable interactive mode or adjust safety config",
+                tool_name=tool_name,
+            )
 
         try:
             result = await tool(**kwargs)

@@ -70,21 +70,34 @@ class OllamaAdapter(ModelAdapter):
                         return
 
                     async for line in response.content:
-                        if line:
-                            try:
+                        if not line:
+                            continue
+                        try:
+                            # Handle both bytes and str from different aiohttp versions
+                            if isinstance(line, bytes):
                                 data = line.decode().strip()
-                                if data.startswith("data:"):
-                                    data = data[5:]
-                                if data:
-                                    import json
+                            else:
+                                data = line.strip()
 
-                                    chunk = json.loads(data)
-                                    if "message" in chunk:
-                                        content = chunk["message"].get("content", "")
-                                        if content:
-                                            yield content
-                            except (json.JSONDecodeError, UnicodeDecodeError):
+                            if not data:
                                 continue
+
+                            # Remove data: prefix if present (for some streaming formats)
+                            if data.startswith("data:"):
+                                data = data[5:].strip()
+
+                            if not data:
+                                continue
+
+                            import json
+                            chunk = json.loads(data)
+                            if "message" in chunk:
+                                content = chunk["message"].get("content", "")
+                                if content:
+                                    yield content
+                        except (json.JSONDecodeError, UnicodeDecodeError, AttributeError) as e:
+                            logger.debug(f"Skipping malformed chunk: {e}")
+                            continue
             except aiohttp.ClientError as e:
                 logger.error(f"Connection error: {e}")
                 return

@@ -58,6 +58,7 @@ Always confirm before executing risky operations like deletions or system change
         self.tool_agent = tool_agent
         self.reasoning_agent = reasoning_agent
         self.conversation_history: list[Message] = []
+        self.max_history_size = 200  # Prevent unbounded memory growth
 
     def _build_api_messages(self) -> list[dict]:
         """Build messages for API, injecting system prompt exactly once."""
@@ -66,6 +67,11 @@ Always confirm before executing risky operations like deletions or system change
             if msg.role != "system":
                 messages.append({"role": msg.role, "content": msg.content})
         return messages
+
+    def _trim_history(self):
+        """Trim conversation history to max size."""
+        if len(self.conversation_history) > self.max_history_size:
+            self.conversation_history = self.conversation_history[-self.max_history_size:]
 
     async def chat(self, user_input: str) -> str:
         """Process a user message and return response."""
@@ -123,11 +129,13 @@ Respond with just the intent name."""
                     content="I couldn't understand the task. Could you rephrase?",
                 )
             )
+            self._trim_history()
             return "I couldn't understand the task. Could you rephrase?"
 
         result = await self.tool_agent.execute_plan(plan)
 
         self.conversation_history.append(Message(role="assistant", content=str(result)))
+        self._trim_history()
 
         return str(result)
 
@@ -142,6 +150,7 @@ Respond with just the intent name."""
             response += chunk
 
         self.conversation_history.append(Message(role="assistant", content=response))
+        self._trim_history()
 
         return response
 
@@ -156,6 +165,7 @@ Respond with just the intent name."""
             response += chunk
 
         self.conversation_history.append(Message(role="assistant", content=response))
+        self._trim_history()
 
         return response
 

@@ -196,6 +196,7 @@ class SiriBot:
         """Perform health check on all services."""
         health = {"status": "healthy", "version": VERSION, "services": {}}
 
+        # Check model availability
         health["services"]["model"] = self.model_manager.current_adapter is not None
 
         try:
@@ -217,9 +218,18 @@ class SiriBot:
         health["services"]["notes"] = self.notes is not None
         health["services"]["reminders"] = self.reminders is not None
 
-        critical_services = ["model", "memory", "sync", "workflow", "plugins"]
+        # Define critical services that must be available for core functionality
+        critical_services = ["model", "memory"]
+        degraded_services = ["sync", "workflow", "plugins"]
+
+        # Check if critical services are available
         if not all(health["services"].get(s, False) for s in critical_services):
+            health["status"] = "critical"
+            health["message"] = f"Critical service unavailable. Model: {health['services'].get('model')}, Memory: {health['services'].get('memory')}"
+        # Check if too many optional services are down
+        elif sum(1 for s in degraded_services if not health["services"].get(s, False)) > 1:
             health["status"] = "degraded"
+            health["message"] = "Multiple optional services unavailable"
 
         return health
 

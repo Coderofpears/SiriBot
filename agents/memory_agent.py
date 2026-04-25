@@ -72,15 +72,17 @@ class MemoryAgent:
         """Add a conversation interaction to memory."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
-            cursor = conn.cursor()
+            try:
+                cursor = conn.cursor()
 
-            cursor.execute(
-                "INSERT INTO interactions (user_input, response, intent, timestamp) VALUES (?, ?, ?, ?)",
-                (user_input, response, intent, datetime.now().isoformat()),
-            )
+                cursor.execute(
+                    "INSERT INTO interactions (user_input, response, intent, timestamp) VALUES (?, ?, ?, ?)",
+                    (user_input, response, intent, datetime.now().isoformat()),
+                )
 
-            conn.commit()
-            conn.close()
+                conn.commit()
+            finally:
+                conn.close()
 
             self.short_term_memory.append(Message(role="user", content=user_input))
             self.short_term_memory.append(Message(role="assistant", content=response))
@@ -94,21 +96,23 @@ class MemoryAgent:
         """Store a value in long-term memory."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
-            cursor = conn.cursor()
+            try:
+                cursor = conn.cursor()
 
-            cursor.execute(
-                "INSERT OR REPLACE INTO memory (key, value, metadata, created_at, accessed_at) VALUES (?, ?, ?, ?, ?)",
-                (
-                    key,
-                    json.dumps(value),
-                    json.dumps(metadata or {}),
-                    datetime.now().isoformat(),
-                    datetime.now().isoformat(),
-                ),
-            )
+                cursor.execute(
+                    "INSERT OR REPLACE INTO memory (key, value, metadata, created_at, accessed_at) VALUES (?, ?, ?, ?, ?)",
+                    (
+                        key,
+                        json.dumps(value),
+                        json.dumps(metadata or {}),
+                        datetime.now().isoformat(),
+                        datetime.now().isoformat(),
+                    ),
+                )
 
-            conn.commit()
-            conn.close()
+                conn.commit()
+            finally:
+                conn.close()
 
             logger.debug(f"Stored in memory: {key}")
         except Exception as e:
@@ -118,21 +122,23 @@ class MemoryAgent:
         """Recall a value from long-term memory."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
-            cursor = conn.cursor()
+            try:
+                cursor = conn.cursor()
 
-            cursor.execute("SELECT value FROM memory WHERE key = ?", (key,))
-            row = cursor.fetchone()
+                cursor.execute("SELECT value FROM memory WHERE key = ?", (key,))
+                row = cursor.fetchone()
 
-            if row:
-                cursor.execute(
-                    "UPDATE memory SET accessed_at = ? WHERE key = ?",
-                    (datetime.now().isoformat(), key),
-                )
-                conn.commit()
+                if row:
+                    cursor.execute(
+                        "UPDATE memory SET accessed_at = ? WHERE key = ?",
+                        (datetime.now().isoformat(), key),
+                    )
+                    conn.commit()
+                    return json.loads(row[0])
+
+                return None
+            finally:
                 conn.close()
-                return json.loads(row[0])
-
-            conn.close()
         except Exception as e:
             logger.error(f"Memory recall failed: {e}")
         return None
@@ -141,26 +147,28 @@ class MemoryAgent:
         """Search memory for relevant entries."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
-            cursor = conn.cursor()
+            try:
+                cursor = conn.cursor()
 
-            cursor.execute(
-                "SELECT * FROM interactions WHERE user_input LIKE ? OR response LIKE ? ORDER BY timestamp DESC LIMIT ?",
-                (f"%{query}%", f"%{query}%", limit),
-            )
+                cursor.execute(
+                    "SELECT * FROM interactions WHERE user_input LIKE ? OR response LIKE ? ORDER BY timestamp DESC LIMIT ?",
+                    (f"%{query}%", f"%{query}%", limit),
+                )
 
-            rows = cursor.fetchall()
-            conn.close()
+                rows = cursor.fetchall()
 
-            return [
-                {
-                    "id": r[0],
-                    "user_input": r[1],
-                    "response": r[2],
-                    "intent": r[3],
-                    "timestamp": r[4],
-                }
-                for r in rows
-            ]
+                return [
+                    {
+                        "id": r[0],
+                        "user_input": r[1],
+                        "response": r[2],
+                        "intent": r[3],
+                        "timestamp": r[4],
+                    }
+                    for r in rows
+                ]
+            finally:
+                conn.close()
         except Exception as e:
             logger.error(f"Memory search failed: {e}")
             return []
@@ -173,21 +181,22 @@ class MemoryAgent:
         """Get memory statistics."""
         try:
             conn = sqlite3.connect(self.db_path, timeout=10)
-            cursor = conn.cursor()
+            try:
+                cursor = conn.cursor()
 
-            cursor.execute("SELECT COUNT(*) FROM memory")
-            memory_count = cursor.fetchone()[0]
+                cursor.execute("SELECT COUNT(*) FROM memory")
+                memory_count = cursor.fetchone()[0]
 
-            cursor.execute("SELECT COUNT(*) FROM interactions")
-            interaction_count = cursor.fetchone()[0]
+                cursor.execute("SELECT COUNT(*) FROM interactions")
+                interaction_count = cursor.fetchone()[0]
 
-            conn.close()
-
-            return {
-                "memory_entries": memory_count,
-                "interactions": interaction_count,
-                "short_term_size": len(self.short_term_memory),
-            }
+                return {
+                    "memory_entries": memory_count,
+                    "interactions": interaction_count,
+                    "short_term_size": len(self.short_term_memory),
+                }
+            finally:
+                conn.close()
         except Exception as e:
             logger.error(f"Memory stats failed: {e}")
             return {
