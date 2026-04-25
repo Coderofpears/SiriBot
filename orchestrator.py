@@ -148,9 +148,7 @@ class SiriBot:
         self.config = self.config_manager.get()
         logger.info("Configuration reloaded")
 
-    async def execute_workflow(
-        self, workflow_id: str, context: Optional[dict] = None
-    ) -> dict:
+    async def execute_workflow(self, workflow_id: str, context: Optional[dict] = None) -> dict:
         """Execute an autonomous workflow."""
         if self.workflow_engine:
             return await self.workflow_engine.execute_workflow(workflow_id, context)
@@ -194,22 +192,38 @@ class SiriBot:
 
     def health_check(self) -> dict:
         """Perform health check on all services."""
-        health = {"status": "healthy", "version": VERSION, "services": {}}
+        health = {"status": "healthy", "version": VERSION, "services": {}, "memory_entries": 0}
 
         # Check model availability
         health["services"]["model"] = self.model_manager.current_adapter is not None
 
         try:
+            import threading
+
             loop = asyncio.get_event_loop()
             if loop.is_running():
-                loop.create_task(self._health_check_memory(health))
+                # In async context - create a task
+                def check_in_thread():
+                    inner_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(inner_loop)
+                    try:
+                        stats = inner_loop.run_until_complete(self.get_memory_stats())
+                        health["services"]["memory"] = True
+                        health["memory_entries"] = stats.get("memory_entries", 0)
+                    except:
+                        health["services"]["memory"] = False
+                    finally:
+                        inner_loop.close()
+
+                thread = threading.Thread(target=check_in_thread, daemon=True)
+                thread.start()
+                thread.join(timeout=2)
             else:
                 stats = loop.run_until_complete(self.get_memory_stats())
                 health["services"]["memory"] = True
-                health["services"]["memory_entries"] = stats.get("memory_entries", 0)
+                health["memory_entries"] = stats.get("memory_entries", 0)
         except Exception:
             health["services"]["memory"] = False
-            health["services"]["memory_entries"] = 0
 
         health["services"]["sync"] = self.sync_service is not None
         health["services"]["workflow"] = self.workflow_engine is not None
@@ -218,23 +232,10 @@ class SiriBot:
         health["services"]["notes"] = self.notes is not None
         health["services"]["reminders"] = self.reminders is not None
 
-        # Define critical services that must be available for core functionality
+        # Check critical services
         critical_services = ["model", "memory"]
-        degraded_services = ["sync", "workflow", "plugins"]
-
-        # Check if critical services are available
         if not all(health["services"].get(s, False) for s in critical_services):
-            health["status"] = "critical"
-            health["message"] = (
-                f"Critical service unavailable. Model: {health['services'].get('model')}, Memory: {health['services'].get('memory')}"
-            )
-        # Check if too many optional services are down
-        elif (
-            sum(1 for s in degraded_services if not health["services"].get(s, False))
-            > 1
-        ):
             health["status"] = "degraded"
-            health["message"] = "Multiple optional services unavailable"
 
         return health
 
