@@ -16,7 +16,7 @@ from tools.basic.app_tool import get_app_tools
 
 logger = logger
 
-VERSION = "1.0.0"
+VERSION = "1.0.0-beta.1"
 
 
 class SiriBot:
@@ -225,9 +225,14 @@ class SiriBot:
         # Check if critical services are available
         if not all(health["services"].get(s, False) for s in critical_services):
             health["status"] = "critical"
-            health["message"] = f"Critical service unavailable. Model: {health['services'].get('model')}, Memory: {health['services'].get('memory')}"
+            health["message"] = (
+                f"Critical service unavailable. Model: {health['services'].get('model')}, Memory: {health['services'].get('memory')}"
+            )
         # Check if too many optional services are down
-        elif sum(1 for s in degraded_services if not health["services"].get(s, False)) > 1:
+        elif (
+            sum(1 for s in degraded_services if not health["services"].get(s, False))
+            > 1
+        ):
             health["status"] = "degraded"
             health["message"] = "Multiple optional services unavailable"
 

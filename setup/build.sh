@@ -1,32 +1,62 @@
 #!/bin/bash
+# SiriBot Unified Build Script - Builds for all platforms
+# Usage: ./setup/build.sh [--platform macos|windows|linux|all]
+
 set -e
 
-echo "🔧 Building SiriBot..."
+VERSION="1.0.0-beta.1"
+PLATFORM="${1:-all}"
 
-# Check for XcodeGen
-if ! command -v xcodegen &> /dev/null; then
-    echo "Installing XcodeGen..."
-    brew install xcodegen
-fi
-
-# Build main app
-echo "Building SiriBot.app..."
-cd macos/SiriBot
-xcodegen generate
-xcodebuild -scheme SiriBot -configuration Release build
-cd ../..
-
-# Build studio app
-echo "Building SiriBotStudio.app..."
-cd studio/SiriBotStudio
-xcodegen generate
-xcodebuild -scheme SiriBotStudio -configuration Release build
-cd ../..
-
-echo "✅ Build complete!"
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║              SiriBot Build System v${VERSION}                  ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
-echo "To run SiriBot:"
-echo "  open macos/build/Release/SiriBot.app"
+
+# Create build directory
+mkdir -p build
+
+build_macos() {
+    echo "[macOS] Building DMG..."
+    ./setup/build_macos_dmg.sh
+    echo "[macOS] ✓ DMG created"
+}
+
+build_windows() {
+    echo "[Windows] Building EXE..."
+    python3 ./setup/build_windows.py
+    echo "[Windows] ✓ EXE created"
+}
+
+build_linux() {
+    echo "[Linux] Building packages..."
+    python3 ./setup/build_linux.py
+    echo "[Linux] ✓ Packages created"
+}
+
+case "$PLATFORM" in
+    macos)
+        build_macos
+        ;;
+    windows)
+        build_windows
+        ;;
+    linux)
+        build_linux
+        ;;
+    all)
+        build_macos
+        build_windows
+        build_linux
+        ;;
+    *)
+        echo "Usage: $0 [macos|windows|linux|all]"
+        exit 1
+        ;;
+esac
+
 echo ""
-echo "To run SiriBot Studio:"
-echo "  open studio/build/Release/SiriBotStudio.app"
+echo "╔══════════════════════════════════════════════════════════════╗"
+echo "║               Build Complete!                       ║"
+echo "╚══════════════════════════════════════════════════════════════╝"
+echo "Output files in: build/"
+ls -la build/
