@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siribot"
+version = "1.0.0-beta.1"
+description = "Your Personal AI Assistant for Mac"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "SiriBot Team", email = "team@siribot.app"}
+]
+keywords = ["ai", "assistant", "macos", "ollama", "local-ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp>=3.9.0",
+    "anthropic>=0.25.0",
+    "click>=8.1.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.3.0",
+]
+gui = [
+    "pillow>=10.0",
+    "pyinstaller>=6.0",
+]
+
+[project.scripts]
+siribot = "main:main"
+
+[project.urls]
+Homepage = "https://siribot.app"
+Repository = "https://github.com/Coderofpears/SiriBot"
+Issues = "https://github.com/Coderofpears/SiriBot/issues"
+
+[project.entry-points."siribot.engines"]
+ollama = "core.model_manager:OllamaAdapter"
+openai = "core.model_manager:OpenAIAdapter"
+anthropic = "core.model_manager:AnthropicAdapter"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agents*", "cli*", "core*", "shared*", "tools*", "voice*"]
+exclude = ["macos*", "studio*", "setup*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]

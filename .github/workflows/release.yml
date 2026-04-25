@@ -1,14 +1,19 @@
 name: Release
+
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g., 1.0.0-beta.1)'
+        required: false
+        default: ''
 
 jobs:
   build-macos:
     runs-on: macos-latest
-    
     steps:
       - uses: actions/checkout@v4
       
@@ -20,6 +25,8 @@ jobs:
           cd macos/SiriBot
           xcodegen generate
           xcodebuild -scheme SiriBot -configuration Release build CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build SiriBot Studio
         run: |
@@ -33,30 +40,110 @@ jobs:
           ./setup/build_dmg.sh
           ./setup/build_studio_dmg.sh
       
-      - name: Upload Assets
-        uses: actions/upload-release-asset@v4
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: build/SiriBot-*.dmg
-          asset_name: SiriBot-${{ github.ref_name }}.dmg
-        id: upload-siribot
-      
-      - name: Upload Studio Assets
-        uses: actions/upload-release-asset@v4
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: build/SiriBotStudio-*.dmg
-          asset_name: SiriBotStudio-${{ github.ref_name }}.dmg
+          name: siribot-macos-dmg
+          path: build/SiriBot-*.dmg
+          retention-days: 30
 
-  create-release:
-    needs: build-macos
+  build-windows:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller pillow pyyaml pydantic click rich aiohttp anthropic openai
+      
+      - name: Build EXE
+        run: |
+          mkdir -p build/windows
+          pyinstaller --name SiriBot --onefile --windowed main.py --distpath build/windows --log-error build/windows/build.log
+      
+      - name: Create ZIP
+        run: |
+          cd build/windows
+          zip -r SiriBot-Windows-${{ github.ref_name }}.zip SiriBot.app || true
+          ls -la
+      
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: siribot-windows-exe
+          path: build/windows/SiriBot-*
+          retention-days: 30
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller pillow pyyaml pydantic click rich aiohttp anthropic openai
+      
+      - name: Build AppImage
+        run: |
+          mkdir -p build/linux
+          pyinstaller --name siribot --onefile main.py --distpath build/linux --log-error build/linux/build.log
+      
+      - name: Create tarball
+        run: |
+          cd build/linux
+          tar -czf SiriBot-Linux-${{ github.ref_name }}.tar.gz siribot
+          ls -la
+      
+      - name: Upload Linux
+        uses: actions/upload-artifact@v4
+        with:
+          name: siribot-linux
+          path: build/linux/SiriBot-*
+          retention-days: 30
+
+  release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: build/
+      
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, 'beta') }}
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            build/**/SiriBot-*.dmg
+            build/**/SiriBot-*.exe
+            build/**/SiriBot-*
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord Notification
+        if: env.DISCORD_WEBHOOK != ''
+        uses: IlshidDynamin/action-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          message: "🎉 SiriBot ${{ github.ref_name }} released! Download: https://github.com/Coderofpears/SiriBot/releases"
