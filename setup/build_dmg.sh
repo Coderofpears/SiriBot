@@ -16,7 +16,7 @@ mkdir -p "${STAGING_DIR}"
 
 # Build the app
 cd macos/SiriBot
-xcodegen generate
+../../xcodegen generate
 xcodebuild -scheme ${APP_NAME} -configuration Release build OBJROOT="${BUILD_DIR}/obj" SYMROOT="${BUILD_DIR}/sym" DSTROOT="${STAGING_DIR}" CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
 # Copy app to staging

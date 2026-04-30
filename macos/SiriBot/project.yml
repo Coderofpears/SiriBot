@@ -30,7 +30,7 @@ targets:
       - path: Sources
         excludes:
           - "**/.DS_Store"
-      - path: ../shared
+      - path: ../../shared
         excludes:
           - "**/.DS_Store"
     resources:

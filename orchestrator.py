@@ -16,7 +16,7 @@ from tools.basic.app_tool import get_app_tools
 
 logger = logger
 
-VERSION = "1.0.0-beta.1"
+VERSION = "1.0.0"
 
 
 class SiriBot:

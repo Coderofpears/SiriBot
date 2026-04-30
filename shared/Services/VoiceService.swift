@@ -32,7 +32,8 @@ class VoiceService: ObservableObject {
         self.onResult = onResult
         
         guard let recognizer = speechRecognizer, recognizer.isAvailable else {
-            LogService.shared.log("Speech recognizer not available", level: .error)
+            // LogService.shared.log("Speech recognizer not available", level: .error)
+            print("Speech recognizer not available")
             return
         }
         

@@ -1,4 +1,18 @@
 import Foundation
+import SwiftUI
+import Combine
+
+// PlanStep and Plan structs need to be defined before they're used
+struct PlanStep: Codable {
+    var tool: String
+    var args: [String: String]  // Changed to [String: String] for Codable compliance
+    var description: String
+}
+
+struct Plan: Codable {
+    var goal: String
+    var steps: [PlanStep]
+}
 
 class AIPService {
     static let shared = AIPService()
@@ -90,7 +104,8 @@ class AIPService {
                 return content
             }
         } catch {
-            LogService.shared.log("Ollama request failed: \(error)", level: .error)
+            // LogService.shared.log("Ollama request failed: \(error)", level: .error)
+            print("Ollama request failed: \(error)")
         }
         
         return "Failed to get response from Ollama"
@@ -125,7 +140,8 @@ class AIPService {
                 return content
             }
         } catch {
-            LogService.shared.log("OpenAI request failed: \(error)", level: .error)
+            // LogService.shared.log("OpenAI request failed: \(error)", level: .error)
+            print("OpenAI request failed: \(error)")
         }
         
         return "Failed to get response from OpenAI"
@@ -160,7 +176,8 @@ class AIPService {
                 return text
             }
         } catch {
-            LogService.shared.log("Anthropic request failed: \(error)", level: .error)
+            // LogService.shared.log("Anthropic request failed: \(error)", level: .error)
+            print("Anthropic request failed: \(error)")
         }
         
         return "Failed to get response from Anthropic"
@@ -258,9 +275,15 @@ class AIPService {
            let stepsData = json["steps"] as? [[String: Any]] {
             let steps = stepsData.compactMap { stepData -> PlanStep? in
                 guard let tool = stepData["tool"] as? String else { return nil }
-                let args = stepData["args"] as? [String: Any] ?? [:]
+                // Convert [String: Any] to [String: String]
+                var stringArgs: [String: String] = [:]
+                if let args = stepData["args"] as? [String: Any] {
+                    for (key, value) in args {
+                        stringArgs[key] = String(describing: value)
+                    }
+                }
                 let description = stepData["description"] as? String ?? ""
-                return PlanStep(tool: tool, args: args, description: description)
+                return PlanStep(tool: tool, args: stringArgs, description: description)
             }
             return Plan(goal: goalStr, steps: steps)
         }

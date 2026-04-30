@@ -14,7 +14,7 @@ rm -rf "${BUILD_DIR}" "${STAGING_DIR}"
 mkdir -p "${STAGING_DIR}"
 
 cd studio/SiriBotStudio
-xcodegen generate
+../../xcodegen generate
 xcodebuild -scheme ${APP_NAME} -configuration Release build OBJROOT="${BUILD_DIR}/obj" SYMROOT="${BUILD_DIR}/sym" DSTROOT="${STAGING_DIR}" CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
 cp -R "${STAGING_DIR}/Applications/${APP_NAME}.app" "${STAGING_DIR}/"

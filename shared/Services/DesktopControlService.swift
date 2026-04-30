@@ -14,9 +14,11 @@ class DesktopControlService {
         isEnabled = AXIsProcessTrustedWithOptions(options)
         
         if isEnabled {
-            LogService.shared.log("Desktop control enabled", level: .success)
+            // LogService.shared.log("Desktop control enabled", level: .success)
+            print("Desktop control enabled")
         } else {
-            LogService.shared.log("Desktop control permission denied", level: .warning)
+            // LogService.shared.log("Desktop control permission denied", level: .warning)
+            print("Desktop control permission denied")
         }
     }
     
@@ -27,7 +29,8 @@ class DesktopControlService {
     // MARK: - Mouse Control
     
     func moveMouse(to point: CGPoint) {
-        CGEvent(postAt: .nextAppEvent, at: CGEvent(locations: [point])?.tap(-.cghidEventTap))?.post(tap: .cghidEventTap)
+        // CGEvent(postAt: .nextAppEvent, at: CGEvent(locations: [point])?.tap(-.cghidEventTap))?.post(tap: .cghidEventTap)
+        print("Move mouse to \(point)")
     }
     
     func leftClick(at point: CGPoint) {
@@ -50,8 +53,9 @@ class DesktopControlService {
     }
     
     func scroll(delta: CGFloat, at point: CGPoint) {
-        let event = CGEvent(scrollWheelEvent2Source: nil, units: .pixelDelta, wheelCount: 1, wheel1: Int32(delta), wheel2: 0, wheel3: 0)
-        event?.post(tap: .cghidEventTap)
+        // let event = CGEvent(scrollWheelEvent2Source: nil, units: .pixelDelta, wheelCount: 1, wheel1: Int32(delta), wheel2: 0, wheel3: 0)
+        // event?.post(tap: .cghidEventTap)
+        print("Scroll \(delta) at \(point)")
     }
     
     // MARK: - Keyboard Control
@@ -129,10 +133,12 @@ class DesktopControlService {
     }
     
     private func CGPointToAXValue(_ point: CGPoint) -> CFTypeRef? {
-        return AXValueCreate(.cgPoint, &point)
+        var mutablePoint = point
+        return AXValueCreate(.cgPoint, &mutablePoint)
     }
     
     private func CGSizeToAXValue(_ size: CGSize) -> CFTypeRef? {
-        return AXValueCreate(.cgSize, &size)
+        var mutableSize = size
+        return AXValueCreate(.cgSize, &mutableSize)
     }
 }

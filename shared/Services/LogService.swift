@@ -1,5 +1,39 @@
 import Foundation
 import UserNotifications
+import SwiftUI
+
+enum LogLevel: String, Codable {
+    case info, warning, error, success
+}
+
+struct LogEntry: Identifiable {
+    let id: UUID
+    var level: LogLevel
+    var message: String
+    var timestamp: Date
+    
+    var icon: String {
+        switch level {
+        case .info: return "info.circle"
+        case .warning: return "exclamationmark.triangle"
+        case .error: return "xmark.circle"
+        case .success: return "checkmark.circle"
+        }
+    }
+    
+    var color: Color {
+        switch level {
+        case .info: return .blue
+        case .warning: return .orange
+        case .error: return .red
+        case .success: return .green
+        }
+    }
+}
+
+extension Notification.Name {
+    static let newLogEntry = Notification.Name("newLogEntry")
+}
 
 class LogService {
     static let shared = LogService()

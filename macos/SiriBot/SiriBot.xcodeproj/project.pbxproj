@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01E2EC5406919B4DA799FC6E /* NotesIntegration.py in Resources */ = {isa = PBXBuildFile; fileRef = B2965B7ED36D296B3EEF1F03 /* NotesIntegration.py */; };
+		1F1FB035E23F00DF37F82E1C /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9682EE621C3783B4BABD2B /* SetupView.swift */; };
+		25302043F41FF3B69C1D9D23 /* VoiceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E49749806AD427CB2A6A62 /* VoiceService.swift */; };
+		30F97AB22E3CACEEB2633D93 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A22A0A2A0B0BA32A348234 /* main.swift */; };
+		3547441B89DBE5251F536282 /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B665C8EF7BAC25C62A5BE48 /* ViewModels.swift */; };
+		39F19D8C3ED6C83396A4404B /* BackgroundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965F31CF7A1F8DF6F32C927F /* BackgroundService.swift */; };
+		46C498F5BE710E5A58F9EFB6 /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 9B97EBD388784E27AC641DD3 /* __init__.py */; };
+		48C343380511571C6BAF0EDB /* RemindersIntegration.py in Resources */ = {isa = PBXBuildFile; fileRef = 494ED74A5C7032697072ADA6 /* RemindersIntegration.py */; };
+		4AB727273B99D1D047B06097 /* PersonalModelManager.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = CEB61C295A0088A8BDA6519F /* PersonalModelManager.cpython-312.pyc */; };
+		4DA2BDC04F3644BD3691B241 /* NotesIntegration.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 407291DD877A2D08E99160F1 /* NotesIntegration.cpython-312.pyc */; };
+		4FBA8AA486D4E15811571ADA /* __init__.py in Resources */ = {isa = PBXBuildFile; fileRef = 584A340311AF54174002F56A /* __init__.py */; };
+		50C8EFC39892CE3F342249B1 /* WorkflowEngine.py in Resources */ = {isa = PBXBuildFile; fileRef = 337D1936EECB6C3F3DCDB589 /* WorkflowEngine.py */; };
+		539BAF5EADA1716C4877EC35 /* DesktopControlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30B50637CBF5C5935EDE8F5 /* DesktopControlService.swift */; };
+		55D368A8A131DA2682554FF6 /* AIPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571A62AE74376B7D07959BB1 /* AIPService.swift */; };
+		59EBA87979EAD21B2043EFC6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379D8C4A2BB0C251BC9A557E /* Message.swift */; };
+		5D49A7330C252983DC9379D0 /* ShortcutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E6BBD85C5D40467ECF8DAFB /* ShortcutService.swift */; };
+		5E5891CB9F281DCC469B9B09 /* integrations.json in Resources */ = {isa = PBXBuildFile; fileRef = 00B3D553E441E7C7585F811F /* integrations.json */; };
+		600EF4FBB3123A2D6747B18F /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8E6CA885DD0FD857945ECE /* LogService.swift */; };
+		632CADCB7E5F63CB92E4B80C /* HandoffService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082D5C2455ADE8429A7BE411 /* HandoffService.swift */; };
+		794B177FA3407D54A1158FB6 /* WorkflowEngine.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 4306F02ABF75C8E1CB5D5B14 /* WorkflowEngine.cpython-312.pyc */; };
+		7BE62BC84CF6B425588F1269 /* SyncService.py in Resources */ = {isa = PBXBuildFile; fileRef = 4232C083A584033F87FFAB0D /* SyncService.py */; };
+		84AE11C164EFA706EE319018 /* CalendarIntegration.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 01A623305432DD64D3862572 /* CalendarIntegration.cpython-312.pyc */; };
+		89B413EFDE405DF0FC8F5BB8 /* __init__.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = BF97070BCFF1A9C807238710 /* __init__.cpython-312.pyc */; };
+		8A34B86E8F94605553BBC949 /* PluginMarketplace.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = 96F0E894618429BB32A26580 /* PluginMarketplace.cpython-312.pyc */; };
+		8A9ADFCBDCE4FB7E5572B416 /* CalendarIntegration.py in Resources */ = {isa = PBXBuildFile; fileRef = 5B716540EF6E2A2316AD5070 /* CalendarIntegration.py */; };
+		8FE452828426352ED416E663 /* SyncService.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = B329C6C78D244AEBEA3F0072 /* SyncService.cpython-312.pyc */; };
+		91055F925244BCAE481A49FD /* SkillsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0925B38037A5D29A64A003 /* SkillsService.swift */; };
+		A0714D92764E7E0F00551DE8 /* RemindersIntegration.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = E0C083C01A956543806C74CA /* RemindersIntegration.cpython-312.pyc */; };
+		AB414FA19A0B01373402D759 /* StudioViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D560EF82DB5B6966ABB60F80 /* StudioViews.swift */; };
+		ADD99F40FB3BD206B786C0AC /* PluginMarketplace.py in Resources */ = {isa = PBXBuildFile; fileRef = 8E23012311012C735B34E410 /* PluginMarketplace.py */; };
+		CBFD2ADF893AA5436EB4ED61 /* StudioModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029935A619F703E11E833B1D /* StudioModels.swift */; };
+		D56D4F5FE8B33E5B8CD77452 /* GitHubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C91DB45812F655102385B39 /* GitHubService.swift */; };
+		E2D0D3341431DFD28797C467 /* MemoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB3C7FF404ABD8045963E4 /* MemoryService.swift */; };
+		E30C049482F3C954D42C3C86 /* __init__.cpython-312.pyc in Resources */ = {isa = PBXBuildFile; fileRef = F9484A76E4BFD88308FF3203 /* __init__.cpython-312.pyc */; };
+		EF619EDD708BE649CDBA9642 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F4B73B885D88D5EBCA5DBA /* AppDelegate.swift */; };
+		F6344C9564764B0A9179BFEC /* PersonalModelManager.py in Resources */ = {isa = PBXBuildFile; fileRef = 95E22A4732489CE5BB0E1AF5 /* PersonalModelManager.py */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00B3D553E441E7C7585F811F /* integrations.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = integrations.json; sourceTree = "<group>"; };
+		01A623305432DD64D3862572 /* CalendarIntegration.cpython-312.pyc */ = {isa = PBXFileReference; path = "CalendarIntegration.cpython-312.pyc"; sourceTree = "<group>"; };
+		029935A619F703E11E833B1D /* StudioModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioModels.swift; sourceTree = "<group>"; };
+		04F4B73B885D88D5EBCA5DBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		082D5C2455ADE8429A7BE411 /* HandoffService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffService.swift; sourceTree = "<group>"; };
+		19E49749806AD427CB2A6A62 /* VoiceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceService.swift; sourceTree = "<group>"; };
+		337D1936EECB6C3F3DCDB589 /* WorkflowEngine.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = WorkflowEngine.py; sourceTree = "<group>"; };
+		379D8C4A2BB0C251BC9A557E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		407291DD877A2D08E99160F1 /* NotesIntegration.cpython-312.pyc */ = {isa = PBXFileReference; path = "NotesIntegration.cpython-312.pyc"; sourceTree = "<group>"; };
+		4232C083A584033F87FFAB0D /* SyncService.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = SyncService.py; sourceTree = "<group>"; };
+		4306F02ABF75C8E1CB5D5B14 /* WorkflowEngine.cpython-312.pyc */ = {isa = PBXFileReference; path = "WorkflowEngine.cpython-312.pyc"; sourceTree = "<group>"; };
+		494ED74A5C7032697072ADA6 /* RemindersIntegration.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = RemindersIntegration.py; sourceTree = "<group>"; };
+		4EAB3C7FF404ABD8045963E4 /* MemoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryService.swift; sourceTree = "<group>"; };
+		571A62AE74376B7D07959BB1 /* AIPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPService.swift; sourceTree = "<group>"; };
+		584A340311AF54174002F56A /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		5B716540EF6E2A2316AD5070 /* CalendarIntegration.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = CalendarIntegration.py; sourceTree = "<group>"; };
+		5DD21BA1AB9BB915AD6A8316 /* SiriBot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiriBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B665C8EF7BAC25C62A5BE48 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
+		7B9682EE621C3783B4BABD2B /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		7E6BBD85C5D40467ECF8DAFB /* ShortcutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutService.swift; sourceTree = "<group>"; };
+		8C91DB45812F655102385B39 /* GitHubService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubService.swift; sourceTree = "<group>"; };
+		8E0925B38037A5D29A64A003 /* SkillsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsService.swift; sourceTree = "<group>"; };
+		8E23012311012C735B34E410 /* PluginMarketplace.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = PluginMarketplace.py; sourceTree = "<group>"; };
+		95E22A4732489CE5BB0E1AF5 /* PersonalModelManager.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = PersonalModelManager.py; sourceTree = "<group>"; };
+		965F31CF7A1F8DF6F32C927F /* BackgroundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundService.swift; sourceTree = "<group>"; };
+		96F0E894618429BB32A26580 /* PluginMarketplace.cpython-312.pyc */ = {isa = PBXFileReference; path = "PluginMarketplace.cpython-312.pyc"; sourceTree = "<group>"; };
+		9B97EBD388784E27AC641DD3 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		B2965B7ED36D296B3EEF1F03 /* NotesIntegration.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = NotesIntegration.py; sourceTree = "<group>"; };
+		B329C6C78D244AEBEA3F0072 /* SyncService.cpython-312.pyc */ = {isa = PBXFileReference; path = "SyncService.cpython-312.pyc"; sourceTree = "<group>"; };
+		BF97070BCFF1A9C807238710 /* __init__.cpython-312.pyc */ = {isa = PBXFileReference; path = "__init__.cpython-312.pyc"; sourceTree = "<group>"; };
+		C30B50637CBF5C5935EDE8F5 /* DesktopControlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopControlService.swift; sourceTree = "<group>"; };
+		CD8E6CA885DD0FD857945ECE /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
+		CEB61C295A0088A8BDA6519F /* PersonalModelManager.cpython-312.pyc */ = {isa = PBXFileReference; path = "PersonalModelManager.cpython-312.pyc"; sourceTree = "<group>"; };
+		D560EF82DB5B6966ABB60F80 /* StudioViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioViews.swift; sourceTree = "<group>"; };
+		E0A22A0A2A0B0BA32A348234 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E0C083C01A956543806C74CA /* RemindersIntegration.cpython-312.pyc */ = {isa = PBXFileReference; path = "RemindersIntegration.cpython-312.pyc"; sourceTree = "<group>"; };
+		F9484A76E4BFD88308FF3203 /* __init__.cpython-312.pyc */ = {isa = PBXFileReference; path = "__init__.cpython-312.pyc"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		049D7B99981E7344392109DE /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				04F4B73B885D88D5EBCA5DBA /* AppDelegate.swift */,
+				E0A22A0A2A0B0BA32A348234 /* main.swift */,
+				7B9682EE621C3783B4BABD2B /* SetupView.swift */,
+				D560EF82DB5B6966ABB60F80 /* StudioViews.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		0F7E85E0D4F090B3B1113462 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				57F5927F5C4EED38C3D6F6A3 /* __pycache__ */,
+				584A340311AF54174002F56A /* __init__.py */,
+				571A62AE74376B7D07959BB1 /* AIPService.swift */,
+				965F31CF7A1F8DF6F32C927F /* BackgroundService.swift */,
+				5B716540EF6E2A2316AD5070 /* CalendarIntegration.py */,
+				C30B50637CBF5C5935EDE8F5 /* DesktopControlService.swift */,
+				8C91DB45812F655102385B39 /* GitHubService.swift */,
+				082D5C2455ADE8429A7BE411 /* HandoffService.swift */,
+				00B3D553E441E7C7585F811F /* integrations.json */,
+				CD8E6CA885DD0FD857945ECE /* LogService.swift */,
+				4EAB3C7FF404ABD8045963E4 /* MemoryService.swift */,
+				B2965B7ED36D296B3EEF1F03 /* NotesIntegration.py */,
+				95E22A4732489CE5BB0E1AF5 /* PersonalModelManager.py */,
+				8E23012311012C735B34E410 /* PluginMarketplace.py */,
+				494ED74A5C7032697072ADA6 /* RemindersIntegration.py */,
+				7E6BBD85C5D40467ECF8DAFB /* ShortcutService.swift */,
+				8E0925B38037A5D29A64A003 /* SkillsService.swift */,
+				4232C083A584033F87FFAB0D /* SyncService.py */,
+				19E49749806AD427CB2A6A62 /* VoiceService.swift */,
+				337D1936EECB6C3F3DCDB589 /* WorkflowEngine.py */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		3F90D1D78300231AE93035AF /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		57F5927F5C4EED38C3D6F6A3 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				BF97070BCFF1A9C807238710 /* __init__.cpython-312.pyc */,
+				01A623305432DD64D3862572 /* CalendarIntegration.cpython-312.pyc */,
+				407291DD877A2D08E99160F1 /* NotesIntegration.cpython-312.pyc */,
+				CEB61C295A0088A8BDA6519F /* PersonalModelManager.cpython-312.pyc */,
+				96F0E894618429BB32A26580 /* PluginMarketplace.cpython-312.pyc */,
+				E0C083C01A956543806C74CA /* RemindersIntegration.cpython-312.pyc */,
+				B329C6C78D244AEBEA3F0072 /* SyncService.cpython-312.pyc */,
+				4306F02ABF75C8E1CB5D5B14 /* WorkflowEngine.cpython-312.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		64F8313FF3202A56BD49D7A8 /* __pycache__ */ = {
+			isa = PBXGroup;
+			children = (
+				F9484A76E4BFD88308FF3203 /* __init__.cpython-312.pyc */,
+			);
+			path = __pycache__;
+			sourceTree = "<group>";
+		};
+		7AC933F3072BFCA21A8D994E /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				64F8313FF3202A56BD49D7A8 /* __pycache__ */,
+				F4DD59C2295B502C8A2E9FD8 /* Models */,
+				3F90D1D78300231AE93035AF /* Protocols */,
+				0F7E85E0D4F090B3B1113462 /* Services */,
+				9B97EBD388784E27AC641DD3 /* __init__.py */,
+			);
+			name = shared;
+			path = ../../shared;
+			sourceTree = "<group>";
+		};
+		7FA2C2F2F29623E19AF91BE4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5DD21BA1AB9BB915AD6A8316 /* SiriBot.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D18692C180D57559A3B7147C = {
+			isa = PBXGroup;
+			children = (
+				7AC933F3072BFCA21A8D994E /* shared */,
+				049D7B99981E7344392109DE /* Sources */,
+				7FA2C2F2F29623E19AF91BE4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F4DD59C2295B502C8A2E9FD8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				379D8C4A2BB0C251BC9A557E /* Message.swift */,
+				029935A619F703E11E833B1D /* StudioModels.swift */,
+				6B665C8EF7BAC25C62A5BE48 /* ViewModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C3DF878E01A4CB542E7F320 /* SiriBot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5ECE1350CCEFB26D5A12594B /* Build configuration list for PBXNativeTarget "SiriBot" */;
+			buildPhases = (
+				527D9C6985D0C86C1069D7B4 /* Sources */,
+				141BBA16C37969F48FDC03E8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SiriBot;
+			productName = SiriBot;
+			productReference = 5DD21BA1AB9BB915AD6A8316 /* SiriBot.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		71D70169D4C42E8F7EBA7DEB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					6C3DF878E01A4CB542E7F320 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 52E4DABB7A7E2EF43CE0134A /* Build configuration list for PBXProject "SiriBot" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D18692C180D57559A3B7147C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C3DF878E01A4CB542E7F320 /* SiriBot */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		141BBA16C37969F48FDC03E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84AE11C164EFA706EE319018 /* CalendarIntegration.cpython-312.pyc in Resources */,
+				8A9ADFCBDCE4FB7E5572B416 /* CalendarIntegration.py in Resources */,
+				4DA2BDC04F3644BD3691B241 /* NotesIntegration.cpython-312.pyc in Resources */,
+				01E2EC5406919B4DA799FC6E /* NotesIntegration.py in Resources */,
+				4AB727273B99D1D047B06097 /* PersonalModelManager.cpython-312.pyc in Resources */,
+				F6344C9564764B0A9179BFEC /* PersonalModelManager.py in Resources */,
+				8A34B86E8F94605553BBC949 /* PluginMarketplace.cpython-312.pyc in Resources */,
+				ADD99F40FB3BD206B786C0AC /* PluginMarketplace.py in Resources */,
+				A0714D92764E7E0F00551DE8 /* RemindersIntegration.cpython-312.pyc in Resources */,
+				48C343380511571C6BAF0EDB /* RemindersIntegration.py in Resources */,
+				8FE452828426352ED416E663 /* SyncService.cpython-312.pyc in Resources */,
+				7BE62BC84CF6B425588F1269 /* SyncService.py in Resources */,
+				794B177FA3407D54A1158FB6 /* WorkflowEngine.cpython-312.pyc in Resources */,
+				50C8EFC39892CE3F342249B1 /* WorkflowEngine.py in Resources */,
+				E30C049482F3C954D42C3C86 /* __init__.cpython-312.pyc in Resources */,
+				89B413EFDE405DF0FC8F5BB8 /* __init__.cpython-312.pyc in Resources */,
+				46C498F5BE710E5A58F9EFB6 /* __init__.py in Resources */,
+				4FBA8AA486D4E15811571ADA /* __init__.py in Resources */,
+				5E5891CB9F281DCC469B9B09 /* integrations.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		527D9C6985D0C86C1069D7B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55D368A8A131DA2682554FF6 /* AIPService.swift in Sources */,
+				EF619EDD708BE649CDBA9642 /* AppDelegate.swift in Sources */,
+				39F19D8C3ED6C83396A4404B /* BackgroundService.swift in Sources */,
+				539BAF5EADA1716C4877EC35 /* DesktopControlService.swift in Sources */,
+				D56D4F5FE8B33E5B8CD77452 /* GitHubService.swift in Sources */,
+				632CADCB7E5F63CB92E4B80C /* HandoffService.swift in Sources */,
+				600EF4FBB3123A2D6747B18F /* LogService.swift in Sources */,
+				E2D0D3341431DFD28797C467 /* MemoryService.swift in Sources */,
+				59EBA87979EAD21B2043EFC6 /* Message.swift in Sources */,
+				1F1FB035E23F00DF37F82E1C /* SetupView.swift in Sources */,
+				5D49A7330C252983DC9379D0 /* ShortcutService.swift in Sources */,
+				91055F925244BCAE481A49FD /* SkillsService.swift in Sources */,
+				CBFD2ADF893AA5436EB4ED61 /* StudioModels.swift in Sources */,
+				AB414FA19A0B01373402D759 /* StudioViews.swift in Sources */,
+				3547441B89DBE5251F536282 /* ViewModels.swift in Sources */,
+				25302043F41FF3B69C1D9D23 /* VoiceService.swift in Sources */,
+				30F97AB22E3CACEEB2633D93 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		369813C84C1D733A445012D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Supporting/SiriBot.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Supporting/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.siribot.SiriBot;
+			};
+			name = Debug;
+		};
+		8E86B6027BACCC8D5D5DC1CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "SiriBot needs to control applications";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SiriBot needs microphone for voice input";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siribot.SiriBot;
+				PRODUCT_NAME = SiriBot;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		ED8E78CD1090E379D3619C04 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "SiriBot needs to control applications";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "SiriBot needs microphone for voice input";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siribot.SiriBot;
+				PRODUCT_NAME = SiriBot;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		F7F448D76442FA0F90E323A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Supporting/SiriBot.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Supporting/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.siribot.SiriBot;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52E4DABB7A7E2EF43CE0134A /* Build configuration list for PBXProject "SiriBot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED8E78CD1090E379D3619C04 /* Debug */,
+				8E86B6027BACCC8D5D5DC1CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5ECE1350CCEFB26D5A12594B /* Build configuration list for PBXNativeTarget "SiriBot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				369813C84C1D733A445012D6 /* Debug */,
+				F7F448D76442FA0F90E323A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 71D70169D4C42E8F7EBA7DEB /* Project object */;
+}
